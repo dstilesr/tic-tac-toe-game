@@ -13,6 +13,7 @@ class Game:
         (0, 3, 6), (1, 4, 7), (2, 5, 8),  #: Columns
         (0, 4, 8), (2, 4, 6)  #: Diagonals
     ]
+    EMPTY_MARK: str = "-"
 
     def __init__(
             self,
@@ -24,7 +25,7 @@ class Game:
         :param x_player:
         :param o_player:
         """
-        self.__state = "0" * 9
+        self.__state = self.EMPTY_MARK * 9
         self.__next_turn: PLAYS = "X"
 
         assert x_player.mark == "X" and o_player.mark == "O", "Wrong player setting!"
@@ -64,14 +65,16 @@ class Game:
         """
         return self.__settings
 
-    @staticmethod
-    def empty_cells(state: str) -> List[int]:
+    def empty_cells(self, state: str) -> List[int]:
         """
         Return the empty cell indices for a given game state.
         :param state:
         :return:
         """
-        return [i for i, cell in enumerate(state) if cell == "0"]
+        return [
+            i for i, cell in enumerate(state)
+            if cell == self.EMPTY_MARK
+        ]
 
     def check_winner(self, state: str) -> Optional[Literal["-", "X", "O"]]:
         """
@@ -80,7 +83,7 @@ class Game:
         :param state:
         :return:
         """
-        board_full = "-" not in state
+        board_full = self.EMPTY_MARK not in state
         for play in ("X", "O"):
             won = any(
                 all(state[i] == play for i in w)
