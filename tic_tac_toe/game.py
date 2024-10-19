@@ -1,9 +1,7 @@
 from typing import Literal, List, Optional, Tuple, Dict
 
 from .players import BasePlayer
-from .schemas import GameSettings
-
-_PLAYS = Literal["X", "O"]
+from .schemas import GameSettings, PLAYS
 
 
 class Game:
@@ -27,12 +25,21 @@ class Game:
         :param o_player:
         """
         self.__state = "0" * 9
-        self.__next_turn: _PLAYS = "X"
-        self.players: Dict[_PLAYS, BasePlayer] = {
+        self.__next_turn: PLAYS = "X"
+
+        assert x_player.mark == "X" and o_player.mark == "O", "Wrong player setting!"
+        self.__players = {
             "X": x_player,
             "O": o_player,
         }
         self.__settings = settings
+
+    @property
+    def players(self) -> Dict[PLAYS, BasePlayer]:
+        """
+        Dictionary mapping mark -> player.
+        """
+        return self.__players
 
     @property
     def state(self) -> str:
@@ -44,7 +51,7 @@ class Game:
         return self.__state
 
     @property
-    def next_turn(self) -> _PLAYS:
+    def next_turn(self) -> PLAYS:
         """
         Which player has the next turn in the game. 1 for X, 2 for O.
         """

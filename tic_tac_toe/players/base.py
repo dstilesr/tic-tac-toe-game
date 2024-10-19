@@ -1,5 +1,7 @@
-from typing import Literal, List
+from typing import List
 from abc import ABC, abstractmethod
+
+from ..schemas import PLAYS
 
 
 class BasePlayer(ABC):
@@ -7,7 +9,7 @@ class BasePlayer(ABC):
     Interface for a player in the game.
     """
 
-    def __init__(self, mark: Literal["X", "O"]) -> None:
+    def __init__(self, mark: PLAYS) -> None:
         self.__mark = mark
 
         rival = "O" if self.mark == "X" else "X"
@@ -18,7 +20,7 @@ class BasePlayer(ABC):
         }
 
     @property
-    def mark(self) -> Literal["X", "O"]:
+    def mark(self) -> PLAYS:
         """
         Which 'mark' the player plays.
         """
