@@ -104,6 +104,20 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         """
         return self.__agent_qs
 
+    @property
+    def gamma(self) -> float:
+        """
+        Discount rate (gamma value).
+        """
+        return self.__gamma
+
+    @property
+    def alpha(self) -> float:
+        """
+        Step size / learning rate (alpha value).
+        """
+        return self.__step_size
+
     def check_visited_state(
             self,
             state: str,
