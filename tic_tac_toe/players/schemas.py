@@ -6,6 +6,8 @@ class TDSettings(BaseModel):
     """
     Settings for a general TD-Learner Player.
     """
+    random_seed: int = 9876
+    epsilon_greedy: bool = True
     epsilon: float = Field(
         default=0.1,
         ge=0.0,
@@ -28,6 +30,6 @@ class TabularPolicy(BaseModel):
     """
     A tabular policy.
     """
-    states: Dict[str, Dict[int, float]] = Field(
+    states: Dict[str, Dict[str, float]] = Field(
         description="Map of state -> (action -> q_value)"
     )
