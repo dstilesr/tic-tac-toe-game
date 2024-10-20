@@ -137,3 +137,21 @@ class BaseTDPlayer(BasePlayer, metaclass=ABCMeta):
                 for a, q in zip(qs["actions"].tolist(), qs["q_vals"].tolist())
             }
         return TabularPolicy(states=states)
+
+    def select_action(self, state: str) -> int:
+        """
+        Select the next action according to the saved q values.
+        """
+        state_qs = self.agent_q_vals[state]
+        if not self.epsilon_greedy:
+            idx = np.argmax(state_qs["q_vals"])
+            return int(state_qs["actions"][idx])
+
+        val = self.rng.rand()
+        if val <= self.epsilon:
+            # Choose random action
+            return int(self.rng.choice(state_qs["actions"]))
+
+        idx = np.argmax(state_qs["q_vals"])
+        return int(state_qs["actions"][idx])
+
