@@ -1,4 +1,3 @@
-import random
 from typing import List
 
 from ..schemas import PLAYS
@@ -10,9 +9,8 @@ class ConsolePlayer(BasePlayer):
     Human player that interacts via the terminal.
     """
 
-    def __init__(self, mark: PLAYS, random_seed: int = 12345):
+    def __init__(self, mark: PLAYS):
         super().__init__(mark)
-        self.rng = random.Random(random_seed)
 
     def make_move(
             self,
