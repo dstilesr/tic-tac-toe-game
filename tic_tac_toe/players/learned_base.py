@@ -15,9 +15,9 @@ class StateActions(TypedDict):
     q_vals: np.ndarray[Any, np.float32]  #: 1d array of q-values for actions
 
 
-class BaseTDPlayer(BasePlayer, metaclass=ABCMeta):
+class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
     """
-    Base for TD-Learning players.
+    Base for players with learned policies.
     """
 
     @classmethod
@@ -25,7 +25,7 @@ class BaseTDPlayer(BasePlayer, metaclass=ABCMeta):
             cls,
             policy: TabularPolicy,
             mark: PLAYS,
-            settings: TDSettings) -> "BaseTDPlayer":
+            settings: TDSettings) -> "BaseLearnedPlayer":
         """
         Instantiate from a serialized policy.
         :param policy:
