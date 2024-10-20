@@ -1,0 +1,15 @@
+version: 3
+tasks:
+  install-dependencies:
+    desc: Install library dependencies.
+    sources:
+      - requirements.txt
+    cmd: pip install --no-cache-dir -r requirements.txt
+
+  unit-tests:
+    desc: Run unit tests on code.
+    dir: test
+    deps:
+      - install-dependencies
+    cmds:
+      - PYTHONPATH=../ python test_main.py

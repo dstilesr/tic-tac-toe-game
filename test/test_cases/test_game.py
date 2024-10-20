@@ -122,3 +122,25 @@ class TestGame(TestCase):
             self.game.next_turn,
             "Did not update next turn."
         )
+
+    def test_empty_cells(self):
+        """
+        Test that the game can correctly identify empty cells.
+        """
+        board = "-" * 9
+        self.assertEqual(
+            list(range(9)),
+            self.game.empty_cells(board),
+            "Did not identify empty cells."
+        )
+
+        board = (
+            "XOX"
+            "--O"
+            "XO-"
+        )
+        self.assertEqual(
+            [3, 4, 8],
+            self.game.empty_cells(board),
+            "Did not identify empty cells."
+        )
