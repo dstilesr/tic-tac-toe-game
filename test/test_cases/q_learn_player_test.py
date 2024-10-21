@@ -76,7 +76,7 @@ class QLearnPlayerTest(unittest.TestCase):
         Test that a greedy action can be chosen reliably.
         """
         qs = {
-            "---": StateActions(
+            "000": StateActions(
                 actions=np.array([0, 1, 2, 3], dtype=np.int16),
                 q_vals=np.array([0.1, 0.2, 0.1, -2.0], dtype=np.float32),
             )
@@ -89,7 +89,74 @@ class QLearnPlayerTest(unittest.TestCase):
 
         for _ in range(30):
             self.assertEqual(
-                player.select_action("---"),
-                int(np.argmax(qs["---"]["q_vals"])),
+                player.select_action("000"),
+                int(np.argmax(qs["000"]["q_vals"])),
                 "Did not select greedy action!"
             )
+
+    def test_episode_end(self):
+        """
+        Test that the final update is performed correctly on ending a game.
+        """
+        qs = {
+            "000": StateActions(
+                actions=np.array([0, 1, 2, 3], dtype=np.int16),
+                q_vals=np.array([0.0, 1.0, 0.0, 0.0], dtype=np.float32),
+            )
+        }
+        sets = TDSettings(
+            epsilon_greedy=False,
+            epsilon=0.15,
+            default_q=2.0,
+            discount_rate=0.9,
+            step_size=0.9
+        )
+        player = QLearnPlayer(
+            mark="X",
+            settings=sets,
+            agent_q_vals=qs
+        )
+        player.make_move(0.0, "---", [0, 1, 2, 3])
+        player.end_game(2.0, "XOX")
+
+        good = np.allclose(
+            np.array([0.0, 1.9, 0.0, 0.0]),
+            player.agent_q_vals["000"]["q_vals"],
+        )
+        self.assertTrue(good, "Did not correctly update values on episode end!")
+
+    def test_step(self):
+        """
+        Test that the final update is performed correctly on ending a game.
+        """
+        qs = {
+            "000": StateActions(
+                actions=np.array([0, 1, 2, 3], dtype=np.int16),
+                q_vals=np.array([0.0, 1.0, 0.0, 0.0], dtype=np.float32),
+            ),
+            "100": StateActions(
+                actions=np.array([0, 1, 2, 3], dtype=np.int16),
+                q_vals=np.array([0.0, 1.0, 0.0, 0.0], dtype=np.float32),
+            )
+        }
+        sets = TDSettings(
+            epsilon_greedy=False,
+            epsilon=0.15,
+            default_q=2.0,
+            discount_rate=0.8,
+            step_size=0.5
+        )
+        player = QLearnPlayer(
+            mark="X",
+            settings=sets,
+            agent_q_vals=qs
+        )
+        player.make_move(0.0, "---", [0, 1, 2, 3])
+        player.make_move(3.0, "X--", [0, 1, 2, 3])
+
+        good = np.allclose(
+            np.array([0.0, 2.4, 0.0, 0.0]),
+            player.agent_q_vals["000"]["q_vals"],
+        )
+        self.assertTrue(good, "Did not correctly update values on move!")
+
