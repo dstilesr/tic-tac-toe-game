@@ -14,6 +14,13 @@ class Game:
         (0, 4, 8), (2, 4, 6)  #: Diagonals
     ]
     EMPTY_MARK: str = "-"
+    PRINT_TEMPLATE: str = (
+        "%s|%s|%s\n"
+        "-+-+-\n"
+        "%s|%s|%s\n"
+        "-+-+-\n"
+        "%s|%s|%s\n"
+    )
 
     def __init__(
             self,
@@ -28,12 +35,15 @@ class Game:
         self.__state = self.EMPTY_MARK * 9
         self.__next_turn: PLAYS = "X"
 
-        assert x_player.mark == "X" and o_player.mark == "O", "Wrong player setting!"
+        x_player.mark = "X"
+        o_player.mark = "O"
+
         self.__players = {
             "X": x_player,
             "O": o_player,
         }
         self.__settings = settings
+        self.__done = False
 
     @property
     def players(self) -> Dict[PLAYS, BasePlayer]:
@@ -50,6 +60,13 @@ class Game:
         cell.
         """
         return self.__state
+
+    @property
+    def done(self) -> bool:
+        """
+        Return True if the game is finished.
+        """
+        return self.__done
 
     @property
     def next_turn(self) -> PLAYS:
@@ -103,6 +120,9 @@ class Game:
         :return: None if the game is not over. Otherwise, see return for
             'check_winner'.
         """
+        if self.done:
+            raise ValueError("The game has already ended!")
+
         available = self.empty_cells(self.state)
         other = "O" if self.next_turn == "X" else "X"
         move = self.players[self.next_turn].make_move(
@@ -114,9 +134,10 @@ class Game:
         # Update state
         state = list(self.state)
         state[move] = self.next_turn
-        self.__state = ",".join(state)
+        self.__state = "".join(state)
 
         win = self.check_winner(self.state)
+        self.__done = win is not None
         assert win != other, "Cannot win if the other player has made a move!"
 
         if win == self.next_turn:
@@ -140,3 +161,11 @@ class Game:
 
         self.__next_turn = other
         return win
+
+    def state_string(self) -> str:
+        """
+        String to display the current state.
+        """
+        args = tuple(self.state.replace("-", " "))
+        print(args)
+        return self.PRINT_TEMPLATE % args
