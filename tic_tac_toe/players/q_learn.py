@@ -29,16 +29,16 @@ class QLearnPlayer(BaseLearnedPlayer):
         self._prev_state = None
         self._prev_action = None
 
-    def update(self, state: str, reward: float = 0.0):
+    def update(self, mapped_state: str, reward: float = 0.0):
         """
         Update q-val for previous state-action given the new state and reward.
-        :param state:
+        :param mapped_state: Translated state.
         :param reward:
         """
         prev_qs = self.agent_q_vals[self._prev_state]
         prev_idx = np.argmax(prev_qs["actions"] == self._prev_action)
 
-        next_q = np.max(self.agent_q_vals[state]["q_vals"])
+        next_q = np.max(self.agent_q_vals[mapped_state]["q_vals"])
         prev_val = prev_qs["q_vals"][prev_idx]
 
         td_err = reward + self.gamma * next_q - prev_val
@@ -57,12 +57,13 @@ class QLearnPlayer(BaseLearnedPlayer):
         :param available_moves:
         :return:
         """
-        self.check_visited_state(state, available_moves)
+        mapped_state = self.translate_board(state)
+        self.check_visited_state(mapped_state, available_moves)
         if self._prev_state is not None:
-            self.update(state, reward)
+            self.update(mapped_state, reward)
 
-        next_action = self.select_action(state)
-        self._prev_state = state
+        next_action = self.select_action(mapped_state)
+        self._prev_state = mapped_state
         self._prev_action = next_action
         return next_action
 

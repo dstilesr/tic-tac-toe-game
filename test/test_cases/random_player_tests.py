@@ -24,6 +24,13 @@ class RandomPlayerTest(TestCase):
             "Failed to translate board."
         )
 
+        x_play.mark = "O"
+        self.assertEqual(
+            x_play.translate_board(board),
+            "212112200",
+            "Failed to translate board."
+        )
+
         o_play = RandomPlayer("O")
         self.assertEqual(
             o_play.translate_board(board),

@@ -26,6 +26,23 @@ class BasePlayer(ABC):
         """
         return self.__mark
 
+    @mark.setter
+    def mark(self, mark: PLAYS):
+        """
+        Setter for mark property.
+        :param mark:
+        """
+        if mark not in ("X", "O"):
+            raise ValueError("Invalid mark '%s'" % mark)
+
+        rival = "O" if mark == "X" else "X"
+        self.mapping = {
+            mark: "1",
+            rival: "2",
+            "-": "0"
+        }
+        self.__mark = mark
+
     def translate_board(self, state: str) -> str:
         """
         Translate the state of the board to a string of 0, 1, 2 characters. 0
