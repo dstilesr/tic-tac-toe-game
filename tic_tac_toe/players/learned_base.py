@@ -23,7 +23,7 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
     @classmethod
     def from_policy(
             cls,
-            policy: TabularPolicy,
+            policy: Optional[TabularPolicy],
             mark: PLAYS,
             settings: TDSettings) -> "BaseLearnedPlayer":
         """
@@ -35,17 +35,18 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         """
         agent_policy = {}
         # Translate policy format
-        for state, qs in policy.states.items():
-            actions = []
-            state_q = []
-            for a, q in qs.items():
-                actions.append(int(a))
-                state_q.append(q)
+        if policy is not None:
+            for state, qs in policy.states.items():
+                actions = []
+                state_q = []
+                for a, q in qs.items():
+                    actions.append(int(a))
+                    state_q.append(q)
 
-            agent_policy[state] = StateActions(
-                actions=np.array(actions, dtype=np.int16),
-                q_vals=np.array(state_q, dtype=np.float32)
-            )
+                agent_policy[state] = StateActions(
+                    actions=np.array(actions, dtype=np.int16),
+                    q_vals=np.array(state_q, dtype=np.float32)
+                )
 
         return cls(mark=mark, settings=settings, agent_q_vals=agent_policy)
 

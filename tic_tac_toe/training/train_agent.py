@@ -90,7 +90,7 @@ def train_agent_random(
         total_episodes: int = 5000,
         game_settings_file: Union[Path, str] = DEFAULT_GAME_CFG,
         td_settings_file: Union[Path, str] = CONFIGS_DIR / "q-learn-cfg.json",
-        policy_file: Optional[Union[str, Path]] = None,) -> sch.TrainSummary:
+        policy_file: Optional[Union[str, Path]] = None,):
     """
     Train an agent against a random opponent.
     :param run_name:
@@ -147,5 +147,3 @@ def train_agent_random(
 
     with open(OUTPUTS_DIR / run_name / "policy.json", "w") as f:
         json.dump(agent.dump_q_values().model_dump(), f)
-
-    return out
