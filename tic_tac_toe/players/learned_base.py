@@ -157,8 +157,8 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         Select the next action according to the saved q values.
         """
         state_qs = self.agent_q_vals[state]
+        idx = np.argmax(state_qs["q_vals"])
         if not self.epsilon_greedy:
-            idx = np.argmax(state_qs["q_vals"])
             return int(state_qs["actions"][idx])
 
         val = self.rng.rand()
@@ -166,6 +166,5 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
             # Choose random action
             return int(self.rng.choice(state_qs["actions"]))
 
-        idx = np.argmax(state_qs["q_vals"])
         return int(state_qs["actions"][idx])
 
