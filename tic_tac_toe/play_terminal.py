@@ -8,8 +8,7 @@ from .game import Game
 from .schemas import GameSettings
 from .players.random import RandomPlayer
 from .players.console import ConsolePlayer
-from .players.learn_types import PLAYER_TYPES
-from .players.schemas import TDSettings, TabularPolicy
+from .players.learn_types import instantiate_agent
 from .constants import DEFAULT_GAME_CFG, OUTPUTS_DIR, CONFIGS_DIR
 
 
@@ -39,18 +38,11 @@ def play_against_bot(
     if opponent_type == "random":
         opponent = RandomPlayer("O", rand)
     else:
-        if not os.path.isfile(policy_file):
-            raise FileNotFoundError("Did not find policy file.")
-        if not os.path.isfile(td_cfg_file):
-            raise FileNotFoundError("Did not find td cfg file.")
-
-        with open(policy_file, "r") as f_p,\
-             open(td_cfg_file, "r") as f_t:
-            policy = TabularPolicy(**json.load(f_p))
-            td_set = TDSettings(**json.load(f_t))
-
-        _cls = PLAYER_TYPES[opponent_type]
-        opponent = _cls.from_policy(policy=policy, settings=td_set, mark="O")
+        opponent, _ = instantiate_agent(
+            opponent_type,
+            td_settings_file=td_cfg_file,
+            policy_file=policy_file
+        )
 
     which = random.choice(("X", "O"))
     if which == "X":
