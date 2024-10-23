@@ -167,5 +167,4 @@ class Game:
         String to display the current state.
         """
         args = tuple(self.state.replace("-", " "))
-        print(args)
         return self.PRINT_TEMPLATE % args
