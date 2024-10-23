@@ -67,6 +67,7 @@ def play_against_bot(
 
     print("Begin!")
     while done is None:
+        print("\x1b[2J")
         print("=" * 30)
         print("Board:")
         print(game.state_string())
