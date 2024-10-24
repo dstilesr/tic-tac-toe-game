@@ -191,8 +191,8 @@ class QLearnPlayerTest(unittest.TestCase):
             "Did not correctly update values on game end!"
         )
 
-        self.assertIsNone(agent._prev_state, "Did not clear previous state!")
-        self.assertIsNone(agent._prev_action, "Did not clear previous action!")
+        self.assertIsNone(agent.prev_state, "Did not clear previous state!")
+        self.assertIsNone(agent.prev_action, "Did not clear previous action!")
 
     def test_egreedy_prob_compute(self):
         """

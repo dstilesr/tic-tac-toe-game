@@ -3,10 +3,10 @@ from typing import Dict, Optional, List
 
 from ..schemas import PLAYS
 from .schemas import TDSettings
-from .learned_base import BaseLearnedPlayer, StateActions
+from .learned_base import BaseTDPlayer, StateActions
 
 
-class QLearnPlayer(BaseLearnedPlayer):
+class QLearnPlayer(BaseTDPlayer):
     """
     Player that learns via Q-Learning.
     """
@@ -29,8 +29,8 @@ class QLearnPlayer(BaseLearnedPlayer):
             agent_q_vals=agent_q_vals,
             freeze=freeze
         )
-        self._prev_state = None
-        self._prev_action = None
+        self.prev_state = None
+        self.prev_action = None
 
     def update(self, mapped_state: str, reward: float = 0.0):
         """
@@ -41,52 +41,11 @@ class QLearnPlayer(BaseLearnedPlayer):
         if self.frozen:
             return
 
-        prev_qs = self.agent_q_vals[self._prev_state]
-        prev_idx = np.argmax(prev_qs["actions"] == self._prev_action)
+        prev_qs = self.agent_q_vals[self.prev_state]
+        prev_idx = np.argmax(prev_qs["actions"] == self.prev_action)
 
         next_q = np.max(self.agent_q_vals[mapped_state]["q_vals"])
         prev_val = prev_qs["q_vals"][prev_idx]
 
         td_err = reward + self.gamma * next_q - prev_val
         prev_qs["q_vals"][prev_idx] = prev_val + self.alpha * td_err
-
-    def make_move(
-            self,
-            reward: float,
-            state: str,
-            available_moves: List[int]) -> int:
-        """
-        Make a move and update the q-values for the previous state-action
-        pair.
-        :param reward:
-        :param state:
-        :param available_moves:
-        :return:
-        """
-        mapped_state = self.translate_board(state)
-        self.check_visited_state(mapped_state, available_moves)
-        if self._prev_state is not None:
-            self.update(mapped_state, reward)
-
-        next_action = self.select_action(mapped_state)
-        self._prev_state = mapped_state
-        self._prev_action = next_action
-        return next_action
-
-    def end_game(self, reward: float, state: str):
-        """
-        Perform final q-learning update and set previous state and action to
-        None for a future game.
-        :param reward:
-        :param state: Terminal board state.
-        :return:
-        """
-        prev_qs = self.agent_q_vals[self._prev_state]
-        prev_idx = np.argmax(prev_qs["actions"] == self._prev_action)
-        prev_val = prev_qs["q_vals"][prev_idx]
-
-        td_err = reward - prev_val
-        prev_qs["q_vals"][prev_idx] = prev_val + self.alpha * td_err
-
-        self._prev_action = None
-        self._prev_state = None

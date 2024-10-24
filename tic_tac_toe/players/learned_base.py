@@ -1,5 +1,5 @@
 import numpy as np
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from typing import TypedDict, Dict, Optional, List, Any
 
 from ..schemas import PLAYS
@@ -142,7 +142,7 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         :return:
         """
         probs = (
-            np.ones_like(qs, dtype=np.float32) * self.epsilon / qs.shape[0]
+            np.zeros_like(qs) + (self.epsilon / qs.shape[0])
         )
         probs[np.argmax(qs)] += (1.0 - self.epsilon)
         return probs
@@ -197,3 +197,101 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
 
         return int(state_qs["actions"][idx])
 
+
+class BaseTDPlayer(BaseLearnedPlayer, metaclass=ABCMeta):
+    """
+    Base for players based on TD-Learning variants.
+    """
+
+    def __init__(
+            self,
+            mark: PLAYS,
+            settings: TDSettings,
+            agent_q_vals: Optional[Dict[str, StateActions]] = None,
+            freeze: bool = False):
+        """
+        :param mark:
+        :param settings:
+        :param agent_q_vals:
+        :param freeze:
+        """
+        super().__init__(
+            mark=mark,
+            settings=settings,
+            agent_q_vals=agent_q_vals,
+            freeze=freeze
+        )
+        self.__prev_action = None
+        self.__prev_state = None
+
+    @property
+    def prev_action(self) -> Optional[int]:
+        """
+        Previous action taken by the agent.
+        """
+        return self.__prev_action
+
+    @prev_action.setter
+    def prev_action(self, action: Optional[int]) -> None:
+        self.__prev_action = action
+
+    @property
+    def prev_state(self) -> Optional[str]:
+        """
+        Previous state the agent visited.
+        """
+        return self.__prev_state
+
+    @prev_state.setter
+    def prev_state(self, state: Optional[str]) -> None:
+        self.__prev_state = state
+
+    @abstractmethod
+    def update(self, mapped_state: str, reward: float = 0.0):
+        """
+        Update q-val for previous state-action given the new state and reward.
+        :param mapped_state: Translated state.
+        :param reward:
+        """
+        pass
+
+    def make_move(
+            self,
+            reward: float,
+            state: str,
+            available_moves: List[int]) -> int:
+        """
+        Make a move and update the q-values for the previous state-action
+        pair.
+        :param reward:
+        :param state:
+        :param available_moves:
+        :return:
+        """
+        mapped_state = self.translate_board(state)
+        self.check_visited_state(mapped_state, available_moves)
+        if self.prev_state is not None:
+            self.update(mapped_state, reward)
+
+        next_action = self.select_action(mapped_state)
+        self.prev_state = mapped_state
+        self.prev_action = next_action
+        return next_action
+
+    def end_game(self, reward: float, state: str):
+        """
+        Perform final TD-learning update and set previous state and action to
+        None for a future game.
+        :param reward:
+        :param state: Terminal board state.
+        :return:
+        """
+        prev_qs = self.agent_q_vals[self.prev_state]
+        prev_idx = np.argmax(prev_qs["actions"] == self.prev_action)
+        prev_val = prev_qs["q_vals"][prev_idx]
+
+        td_err = reward - prev_val
+        prev_qs["q_vals"][prev_idx] = prev_val + self.alpha * td_err
+
+        self.prev_action = None
+        self.prev_state = None
