@@ -93,10 +93,19 @@ def train_agent(
         policy_file=policy_file,
         td_settings_file=td_settings_file
     )
-    rival = RandomPlayer(
-        "O",
-        random_seed=round(datetime.now(timezone.utc).timestamp())
-    )
+    if opponent_type == "random":
+        rival = RandomPlayer(
+            "O",
+            random_seed=round(datetime.now(timezone.utc).timestamp())
+        )
+        rival_settings = None
+    else:
+        rival, rival_settings = instantiate_agent(
+            opponent_type,
+            policy_file=policy_file,
+            td_settings_file=opponent_settings_file
+        )
+        print("Training against '%s' opponent!" % opponent_type)
 
     episodes = []
     for _ in tqdm(range(total_episodes)):
@@ -112,6 +121,7 @@ def train_agent(
         episodes=episodes,
         game_settings=game_settings,
         td_settings=td_settings,
+        rival_td_settings=rival_settings,
     )
 
     with open(OUTPUTS_DIR / run_name / "summary.json", "w") as f:

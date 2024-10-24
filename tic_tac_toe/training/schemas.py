@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 from ..players.schemas import TDSettings
 from ..schemas import PLAYS, GameSettings
@@ -24,4 +24,5 @@ class TrainSummary(BaseModel):
     total_episodes: int
     game_settings: GameSettings
     td_settings: TDSettings
+    rival_td_settings: Optional[TDSettings] = None
     episodes: List[EpisodeSummary]
