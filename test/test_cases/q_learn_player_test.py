@@ -14,7 +14,7 @@ class QLearnPlayerTest(unittest.TestCase):
     def setUp(self):
         self.ql_settings = TDSettings(
             epsilon_greedy=False,
-            epsilon=0.15,
+            epsilon=0.1,
             default_q=2.0,
             discount_rate=0.9,
             step_size=1.0
@@ -193,4 +193,17 @@ class QLearnPlayerTest(unittest.TestCase):
 
         self.assertIsNone(agent._prev_state, "Did not clear previous state!")
         self.assertIsNone(agent._prev_action, "Did not clear previous action!")
+
+    def test_egreedy_prob_compute(self):
+        """
+        Test that epsilon-greedy probabilities are computed correctly.
+        :return:
+        """
+        vals = np.array([0.0, 5.0, 0.0, 0.0], dtype=np.float32)
+        agent = QLearnPlayer(mark="X", settings=self.ql_settings)
+        probs = agent.get_egreedy_probs(vals)
+        self.assertTrue(
+            np.allclose(probs, np.array([.025, .925, .025, .025])),
+            "Did not compute probabilities correctly!"
+        )
 

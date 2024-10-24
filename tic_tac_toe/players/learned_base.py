@@ -134,6 +134,19 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         """
         return self.__step_size
 
+    def get_egreedy_probs(self, qs: np.ndarray) -> np.ndarray:
+        """
+        Get the epsilon-greedy probability distribution for the given
+        array of action values.
+        :param qs:
+        :return:
+        """
+        probs = (
+            np.ones_like(qs, dtype=np.float32) * self.epsilon / qs.shape[0]
+        )
+        probs[np.argmax(qs)] += (1.0 - self.epsilon)
+        return probs
+
     def check_visited_state(
             self,
             state: str,

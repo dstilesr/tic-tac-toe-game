@@ -32,19 +32,6 @@ class ESarsaPlayer(BaseLearnedPlayer):
         self._prev_state = None
         self._prev_action = None
 
-    def get_egreedy_probs(self, qs: np.ndarray) -> np.ndarray:
-        """
-        Get the epsilon-greedy probability distribution for the given
-        array of action values.
-        :param qs:
-        :return:
-        """
-        probs = (
-            np.ones_like(qs, dtype=np.float32) * self.epsilon / qs.shape[0]
-        )
-        probs[np.argmax(qs)] += (1.0 - self.epsilon)
-        return probs
-
     def update(self, mapped_state: str, reward: float = 0.0):
         """
         Update q-val for previous state-action given the new state and reward.
