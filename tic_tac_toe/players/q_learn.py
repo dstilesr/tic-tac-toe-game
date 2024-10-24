@@ -15,16 +15,19 @@ class QLearnPlayer(BaseLearnedPlayer):
             self,
             mark: PLAYS,
             settings: TDSettings,
-            agent_q_vals: Optional[Dict[str, StateActions]] = None):
+            agent_q_vals: Optional[Dict[str, StateActions]] = None,
+            freeze: bool = False,):
         """
         :param mark:
         :param settings:
         :param agent_q_vals:
+        :param freeze:
         """
         super().__init__(
             mark=mark,
             settings=settings,
-            agent_q_vals=agent_q_vals
+            agent_q_vals=agent_q_vals,
+            freeze=freeze
         )
         self._prev_state = None
         self._prev_action = None
@@ -35,6 +38,9 @@ class QLearnPlayer(BaseLearnedPlayer):
         :param mapped_state: Translated state.
         :param reward:
         """
+        if self.frozen:
+            return
+
         prev_qs = self.agent_q_vals[self._prev_state]
         prev_idx = np.argmax(prev_qs["actions"] == self._prev_action)
 

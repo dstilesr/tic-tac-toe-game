@@ -54,11 +54,13 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
             self,
             mark: PLAYS,
             settings: TDSettings,
-            agent_q_vals: Optional[Dict[str, StateActions]] = None):
+            agent_q_vals: Optional[Dict[str, StateActions]] = None,
+            freeze: bool = False):
         """
         :param mark:
         :param settings:
         :param agent_q_vals:
+        :param freeze: Freeze the agent's weights or not.
         """
         super().__init__(mark)
         self.__epsilon = settings.epsilon
@@ -71,6 +73,19 @@ class BaseLearnedPlayer(BasePlayer, metaclass=ABCMeta):
         if agent_q_vals is None:
             agent_q_vals = {}
         self.__agent_qs = agent_q_vals
+        self.__freeze = freeze
+
+    @property
+    def frozen(self) -> bool:
+        """
+        Return whether the agent values are frozen (as opposed to being
+        updated).
+        """
+        return self.__freeze
+
+    @frozen.setter
+    def frozen(self, value: bool):
+        self.__freeze = bool(value)
 
     @property
     def rng(self) -> np.random.RandomState:
