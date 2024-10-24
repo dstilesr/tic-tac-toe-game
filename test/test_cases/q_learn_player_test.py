@@ -160,3 +160,37 @@ class QLearnPlayerTest(unittest.TestCase):
         )
         self.assertTrue(good, "Did not correctly update values on move!")
 
+    def test_end_game(self):
+        """
+        Test that values are updated correctly when the game ends.
+        :return:
+        """
+        qs = {
+            "000": StateActions(
+                actions=np.array([0, 1, 2, 3], dtype=np.int16),
+                q_vals=np.array([0.0, 1.0, 0.0, 0.0], dtype=np.float32),
+            ),
+            "100": StateActions(
+                actions=np.array([0, 1, 2, 3], dtype=np.int16),
+                q_vals=np.array([0.0, 1.0, 0.0, 0.0], dtype=np.float32),
+            )
+        }
+        sets = TDSettings(
+            epsilon_greedy=False,
+            epsilon=0.15,
+            default_q=2.0,
+            discount_rate=0.8,
+            step_size=0.5
+        )
+        agent = QLearnPlayer(mark="X", settings=sets, agent_q_vals=qs)
+        agent.make_move(0.0, "---", [0, 1, 2, 3])
+        agent.end_game(10.0, "X--")
+
+        self.assertTrue(
+            np.allclose(np.array([0.0, 5.5, 0.0, 0.0]), agent.agent_q_vals["000"]["q_vals"]),
+            "Did not correctly update values on game end!"
+        )
+
+        self.assertIsNone(agent._prev_state, "Did not clear previous state!")
+        self.assertIsNone(agent._prev_action, "Did not clear previous action!")
+

@@ -81,3 +81,6 @@ class QLearnPlayer(BaseLearnedPlayer):
 
         td_err = reward - prev_val
         prev_qs["q_vals"][prev_idx] = prev_val + self.alpha * td_err
+
+        self._prev_action = None
+        self._prev_state = None
