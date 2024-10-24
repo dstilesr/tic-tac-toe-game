@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import Dict, Type, Tuple, Union, Optional
 
 from .q_learn import QLearnPlayer
+from .e_sarsa import ESarsaPlayer
 from .learned_base import BaseLearnedPlayer
 from .schemas import TDSettings, TabularPolicy
 
 PLAYER_TYPES: Dict[str, Type[BaseLearnedPlayer]] = {
-    "q_learn": QLearnPlayer
+    "q_learn": QLearnPlayer,
+    "expected_sarsa": ESarsaPlayer
 }
 
 
