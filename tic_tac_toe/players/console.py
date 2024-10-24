@@ -25,6 +25,7 @@ class ConsolePlayer(BasePlayer):
         """
         selected = None
         while selected not in available_moves:
+            print("Playing as %s" % self.mark)
             player_input = input(
                 "Enter next move (Available: %s) ->  "
                 % ", ".join(map(str, available_moves))
