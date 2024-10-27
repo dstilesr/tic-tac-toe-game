@@ -1,0 +1,7 @@
+{
+  "epsilon_greedy": true,
+  "epsilon": 0.15,
+  "discount_rate": 0.95,
+  "step_size": 0.01,
+  "default_q": 0.0
+}
