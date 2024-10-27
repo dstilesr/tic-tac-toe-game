@@ -1,5 +1,13 @@
 # Tic Tac Toe
 
+## Contents
+
+- [Overview](#overview)
+- [Usage](#usage)
+  - [Setup](#setup)
+  - [Training Agents](#training-agents)
+  - [Play Against Agent](#play-against-agent)
+
 ## Overview
 This repository contains some code to train and play with simple agents that play tic-tac-toe.
 These agents can be trained with tabular TD-learning methods such as Q-Learning and Expected Sarsa.
@@ -70,3 +78,5 @@ python -m tic_tac_toe --help
 
 python -m tic_tac_toe.training --help
 ```
+
+[Back to top.](#tic-tac-toe)
