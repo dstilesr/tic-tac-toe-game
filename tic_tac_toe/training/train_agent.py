@@ -12,7 +12,7 @@ from ..players import BasePlayer
 from ..schemas import GameSettings
 from ..players.random import RandomPlayer
 from ..players.learn_types import instantiate_agent, BaseLearnedPlayer
-from ..constants import OUTPUTS_DIR, CONFIGS_DIR, DEFAULT_GAME_CFG
+from ..constants import OUTPUTS_DIR, DEFAULT_GAME_CFG, DEFAULT_TD_CFG
 
 
 def run_game(
@@ -61,7 +61,7 @@ def train_agent(
         opponent_type: str = "random",
         total_episodes: int = 5000,
         game_settings_file: Union[Path, str] = DEFAULT_GAME_CFG,
-        td_settings_file: Union[Path, str] = CONFIGS_DIR / "q-learn-cfg.json",
+        td_settings_file: Union[Path, str] = DEFAULT_TD_CFG,
         opponent_settings_file: Optional[Union[Path, str]] = None,
         policy_file: Optional[Union[str, Path]] = None,):
     """
@@ -77,7 +77,7 @@ def train_agent(
     :return:
     """
     if opponent_settings_file is None:
-        opponent_settings_file = CONFIGS_DIR / "q-learn-cfg.json"
+        opponent_settings_file = DEFAULT_TD_CFG
 
     if not (OUTPUTS_DIR / run_name).is_dir():
         os.makedirs(OUTPUTS_DIR / run_name)

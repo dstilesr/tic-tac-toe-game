@@ -9,7 +9,7 @@ from .schemas import GameSettings
 from .players.random import RandomPlayer
 from .players.console import ConsolePlayer
 from .players.learn_types import instantiate_agent
-from .constants import DEFAULT_GAME_CFG, OUTPUTS_DIR, CONFIGS_DIR
+from .constants import DEFAULT_GAME_CFG, OUTPUTS_DIR, DEFAULT_TD_CFG
 
 
 __DEFAULT = OUTPUTS_DIR / "test-01"
@@ -19,7 +19,7 @@ def play_against_bot(
         game_cfg: Union[str, Path] = DEFAULT_GAME_CFG,
         opponent_type: str = "random",
         policy_file: Union[Path, str] = __DEFAULT / "policy.json",
-        td_cfg_file: Union[Path, str] = CONFIGS_DIR / "q-learn-cfg.json"):
+        td_cfg_file: Union[Path, str] = DEFAULT_TD_CFG):
     """
     Play game against random player.
     :param game_cfg:
