@@ -1,4 +1,5 @@
 fire==0.7.0
 pydantic==2.9.2
 numpy==2.1.2
+streamlit==1.39.0
 tqdm==4.66.5
