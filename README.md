@@ -7,6 +7,7 @@
   - [Setup](#setup)
   - [Training Agents](#training-agents)
   - [Play Against Agent](#play-against-agent)
+  - [Visualize](#visualize)
 
 ## Overview
 This repository contains some code to train and play with simple agents that play tic-tac-toe.
@@ -78,5 +79,9 @@ python -m tic_tac_toe --help
 
 python -m tic_tac_toe.training --help
 ```
+
+### Visualize
+You can visualize the results of a training run and the learned policy / Q-values
+with a streamlit app by running `streamlit run st_main.py`.
 
 [Back to top.](#tic-tac-toe)
