@@ -122,6 +122,8 @@ def train_agent(
         game_settings=game_settings,
         td_settings=td_settings,
         rival_td_settings=rival_settings,
+        agent_type=agent_type,
+        rival_type=opponent_type,
     )
 
     with open(OUTPUTS_DIR / run_name / "summary.json", "w") as f:

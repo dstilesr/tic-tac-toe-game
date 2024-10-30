@@ -26,3 +26,5 @@ class TrainSummary(BaseModel):
     td_settings: TDSettings
     rival_td_settings: Optional[TDSettings] = None
     episodes: List[EpisodeSummary]
+    agent_type: str
+    rival_type: str
