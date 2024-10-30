@@ -55,8 +55,8 @@ def parse_summary(run: TrainSummary) -> ParsedSummary:
         agent_wins=np.array(wins),
         agent_losses=np.array(losses),
         agent_draws=np.array(draws),
-        opponent_type=run.agent_type,
-        agent_type=run.rival_type,
+        opponent_type=run.rival_type,
+        agent_type=run.agent_type,
         total_episodes=run.total_episodes,
         played_as_x=as_x,
     )
