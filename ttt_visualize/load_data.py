@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import streamlit as st
 from typing import Tuple, TypedDict
 
 from tic_tac_toe import constants as const
@@ -61,6 +62,7 @@ def parse_summary(run: TrainSummary) -> ParsedSummary:
     return out
 
 
+@st.cache_data
 def load_summary_policy(run_name: str) -> Tuple[TabularPolicy, TrainSummary]:
     """
     Load the learned policy (Q-vals, really...) and the run summary for the

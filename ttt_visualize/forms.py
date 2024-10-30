@@ -79,3 +79,4 @@ def evaluate_state_form():
             else:
                 st.session_state["agent_mark"] = agent_mark
                 st.session_state["state"] = clean
+                st.rerun()

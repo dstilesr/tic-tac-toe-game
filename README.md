@@ -43,7 +43,7 @@ python -m tic_tac_toe.training \
        
 # Train an agent with Expected Sarsa against a learning opponent, starting from the values learned in a previous run!
 python -m tic_tac_toe.training \
-       --run_name=test-04 \
+       --run_name=test-03 \
        --total_episodes=275000 \
        --agent_type=expected_sarsa \
        --opponent_type=q_learn \
