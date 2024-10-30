@@ -6,7 +6,10 @@ from ttt_visualize.forms import choose_run_form, evaluate_state_form
 
 st.set_page_config(
     page_title="Tic Tac Toe",
+    page_icon=":brain:"
 )
+
+st.title("Tic Tac Toe Visualizer")
 
 choose_run_form()
 
