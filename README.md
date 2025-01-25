@@ -17,8 +17,8 @@ Once you have trained some agents, you can play against them yourself and see ho
 ## Usage
 
 ### Setup
-In order to use the project, first create a Python virtual environment with your preferred tool. Next,
-you can install the libraries required to run the project by running `pip install -r requirements.txt`, or
+In order to use the project, first create a Python virtual environment with your preferred tool. Dependencies
+are managed using [uv](https://docs.astral.sh/uv/). You can install them with `uv sync`, or by running
 `task install-dependencies`.
 
 Next, you can run unit tests to ensure everything is working properly with `task unit-tests`. Then you should
