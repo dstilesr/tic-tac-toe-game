@@ -1,0 +1,15 @@
+[project]
+name = "tic-tac-toe-game"
+version = "0.1.0"
+description = "Use TD Learning to train agents that play Tic Tac Toe!"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fire==0.7.0",
+    "numpy==2.1.2",
+    "pandas==2.2.3",
+    "plotly==5.24.1",
+    "pydantic==2.10.5",
+    "streamlit==1.39.0",
+    "tqdm==4.66.5",
+]
